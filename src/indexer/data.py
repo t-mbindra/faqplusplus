@@ -1,7 +1,7 @@
 import base64
 import os
 from datetime import datetime
-import hashlib
+import pdfplumber
 import requests
 from typing import List, Dict, Any
 
@@ -13,22 +13,33 @@ def generate_title_from_content(content: str) -> str:
     title = content.split('\n', 1)[0].strip()
     return title if title else ''
 
+def read_pdf(file_path: str) -> str:
+    # Function to read text content from a PDF file
+    with pdfplumber.open(file_path) as pdf:
+        content = ""
+        for page in pdf.pages:
+            content += page.extract_text() + "\n"
+    return content
+
 def get_file_data(folder_path: str, base_path: str) -> List[Dict[str, Any]]:
     data_list = []
     for file_name in os.listdir(folder_path):
         file_path = os.path.join(folder_path, file_name)
         if os.path.isfile(file_path):
-            with open(file_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                relative_path = os.path.relpath(file_path, base_path)
-                data_list.append({
-                    'id': generate_id(file_path),
-                    'content': content,
-                    'filepath': relative_path,
-                    'title': generate_title_from_content(content),
-                    'lastUpdated': datetime.fromtimestamp(os.path.getmtime(file_path)),
-                    'url': None
-                })
+            if file_name.endswith('.pdf'):
+                content = read_pdf(file_path)
+            else:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    content = file.read()
+            relative_path = os.path.relpath(file_path, base_path)
+            data_list.append({
+                'id': generate_id(file_path),
+                'content': content,
+                'filepath': relative_path,
+                'title': generate_title_from_content(content),
+                'lastUpdated': datetime.fromtimestamp(os.path.getmtime(file_path)),
+                'url': None
+            })
         elif os.path.isdir(file_path):
             data_list.extend(get_file_data(file_path, base_path))  # Recursive call for directories
     return data_list
