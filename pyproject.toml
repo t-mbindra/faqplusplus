@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "datasource-azure-openai"
+name = "faqplusplus"
 version = "0.0.0"
 description = "Data Source - Azure OpenAI"
 authors = ["Microsoft <teams@microsoft.com>"]
@@ -13,6 +13,7 @@ python = ">=3.8,<4.0"
 teams-ai = "^1.1.0"
 python-dotenv = "^1.0.1"
 azure-identity = "^1.17.0"
+azure-search-documents = "^11.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"

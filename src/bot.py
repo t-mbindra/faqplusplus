@@ -8,12 +8,14 @@ Description: initialize the app and listen for `message` activitys
 import os
 import sys
 import traceback
-import sys
+import re
 from logging import Logger, StreamHandler, DEBUG
+from pathlib import Path
 
-logger = Logger("teamsai:openai", DEBUG)
-logger.addHandler(StreamHandler(sys.stdout))
 from botbuilder.core import MemoryStorage, TurnContext
+from botbuilder.core.teams import TeamsInfo
+from botbuilder.schema import Activity, ConversationParameters
+from botbuilder.schema.teams import TeamsChannelData, ChannelInfo
 from teams import Application, ApplicationOptions, TeamsAdapter
 from teams.ai import AIOptions
 from teams.ai.models import AzureOpenAIModelOptions, OpenAIModel
@@ -21,15 +23,19 @@ from teams.ai.planners import ActionPlanner, ActionPlannerOptions
 from teams.ai.prompts import PromptManager, PromptManagerOptions, PromptTemplate
 from teams.state import TurnState
 from azure.identity import get_bearer_token_provider, DefaultAzureCredential
-from pathlib import Path
 
 from config import Config
 from state import AppTurnState
+from cards.talk_to_expert_card import create_talk_to_expert_card
+from cards.close_request_card import close_request_card
+
+logger = Logger("teamsai:openai", DEBUG)
+logger.addHandler(StreamHandler(sys.stdout))
 
 config = Config()
 
-if config.AZURE_OPENAI_ENDPOINT is None or config.AZURE_SEARCH_ENDPOINT is None or config.AZURE_SEARCH_INDEX is None:
-    raise RuntimeError("Missing environment variables - please check that AZURE_OPENAI_ENDPOINT, AZURE_SEARCH_ENDPOINT and AZURE_SEARCH_INDEX is set.")
+if config.AZURE_OPENAI_ENDPOINT is None:
+    raise RuntimeError("Missing environment variables - please check that AZURE_OPENAI_ENDPOINT is set.")
 
 # Create AI components
 model: OpenAIModel
@@ -58,7 +64,7 @@ else:
     )
 
 prompts = PromptManager(
-    PromptManagerOptions(prompts_folder=f"{os.path.dirname(os.path.abspath(__file__))}/prompts")
+    PromptManagerOptions(prompts_folder=f"{os.path.dirname(os.path.abspath(__file__))}/prompts"),
 )
 
 # gets prompt template and adds data source config
@@ -128,20 +134,116 @@ app = Application[AppTurnState](
 
 
 @app.conversation_update("membersAdded")
-async def conversation_update(context: TurnContext, state: AppTurnState):
-    await context.send_activity(
-        "Welcome! I'm a conversational bot that can tell you about your data. You can also type `/clear` to clear the conversation history."
-    )
+async def on_member_added(context: TurnContext, state: AppTurnState):
+
+    channel = context.activity.channel_data.get("settings", {}).get("selectedChannel", {}).get("id")  # type: ignore
+
+    if (context.activity.members_added[0].id == context.activity.recipient.id and  # type: ignore
+        channel == "19:NbZrm0QGDBalb7yQtQ5uu_fKf5LRTJcILRxkarAVDs41@thread.tacv2"):
+        await context.send_activity("The FAQ Bot has been added to this channel.")
+        return True
+    
+    member_added_to_channel = context.activity.channel_data.get("team") # type: ignore
+    
+    if (member_added_to_channel is None): 
+        await context.send_activity(
+            "Welcome to the FAQ Bot ! I'm here to answer your queries. To clear the conversation history, type clear in the chat. To talk to an expert, type expert."
+            )
+    
     return True
 
 
-@app.message("/clear")
-async def message(context: TurnContext, state: AppTurnState):
-    state.deleteConversationState()
+@app.message(re.compile(r"clear", re.IGNORECASE))
+async def on_clear(context: TurnContext, state: AppTurnState):
+
+    del state.conversation
     await context.send_activity(
         "New chat session started: Previous messages won't be used as context for new queries."
     )
     return True
+
+
+def get_chat_history(chat_history):
+    chat_items = []
+
+    if chat_history:
+        # Limit the chat history to the last 10 entries
+        limited_history = chat_history[-10:] if len(chat_history) > 10 else chat_history
+
+        for entry in limited_history:
+            role = entry.role.capitalize()
+            content = entry.content
+            chat_items.append(
+                {
+                    "type": "TextBlock",
+                    "text": f"{role}: {content}",
+                    "wrap": True,
+                    "spacing": "small"
+                }
+            )
+
+    return chat_items
+
+def create_teams_channel_data(team_channel_id: str):
+    channel_data = TeamsChannelData()
+    channel_data.channel = ChannelInfo()
+    channel_data.channel.id = team_channel_id
+    return channel_data
+
+async def do_nothing(tc2: TurnContext):
+    return
+
+@app.message(re.compile(r"expert", re.IGNORECASE))
+async def on_talk_to_an_expert(context: TurnContext, state: AppTurnState):
+
+    member = await TeamsInfo.get_member(context, context.activity.from_property.id)  # type: ignore
+    attachment = create_talk_to_expert_card(
+                    member.user_principal_name, context.activity.from_property.name, # type: ignore
+                    get_chat_history(state.conversation.get("chat_history")), "New"
+    )
+
+    params = ConversationParameters(
+        channel_data=create_teams_channel_data('19:NbZrm0QGDBalb7yQtQ5uu_fKf5LRTJcILRxkarAVDs41@thread.tacv2'),
+        bot=context.activity.recipient, is_group=True,
+        activity=Activity(type="message",attachments=[attachment]))
+    
+    await context.adapter.create_conversation(bot_app_id=config.APP_ID,
+        callback=do_nothing,
+        conversation_parameters = params,
+        channel_id="msteams",
+        service_url=context.activity.service_url)
+        
+    # Send the message to the user
+    await context.send_activity("I'm connecting you to an expert. In the meantime, would you like to ask me anything else?")
+    return True
+
+
+@app.adaptive_cards.action_submit("chat_with_user")
+async def on_chat_with_user(context: TurnContext, state: AppTurnState, data: dict):
+
+    attachment = create_talk_to_expert_card(data.get("user_principal_name"), data.get("user_name"),
+                                             data.get("chat_items"), "In progress")
+    await context.update_activity(Activity(id=context.activity.reply_to_id, 
+                                           type="message", attachments=[attachment]))
+    
+    if "messageid" not in context.activity.conversation.id: # type: ignore
+        custom_string = f"{context.activity.channel_data.get('channel').get('id')};messageid={context.activity.reply_to_id}"  # type: ignore
+        context.activity.conversation.id = custom_string  # type: ignore
+
+    await context.send_activity(Activity(type="message", 
+                                         text=f"{context.activity.from_property.name} is resolving the request.")) # type: ignore
+
+
+@app.adaptive_cards.action_submit("close_ticket")
+async def on_close_ticket(context: TurnContext, state: AppTurnState, data: dict):
+
+    attachment = close_request_card(data.get("user_name"),  data.get("chat_items"))  # type: ignore
+    await context.update_activity(Activity(id=context.activity.reply_to_id, 
+                                        type="message", attachments=[attachment]))
+    if "messageid" not in context.activity.conversation.id:   # type: ignore
+        custom_string = f"{context.activity.channel_data.get('channel').get('id')};messageid={context.activity.reply_to_id}"  # type: ignore
+        context.activity.conversation.id = custom_string  # type: ignore
+    await context.send_activity(f"{context.activity.from_property.name} closed the request.") # type: ignore
 
 
 @app.turn_state_factory
