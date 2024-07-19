@@ -40,11 +40,9 @@
 
 ## Deploy Azure AI Resources
 1. Run```sh deploy.sh``` in the terminal. You will be prompted to login to Azure and select a subscription.
-#### Data Ingestion
-2. Add your data according to the instructions [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/use-your-data?tabs=ai-search). 
-OR
-Add all your data to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
-3. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT, SECRET_AZURE_SEARCH_ENDPOINT, SECRET_AZURE_SEARCH_KEY, AZURE_SEARCH_INDEX``` variables from the [Azure portal](https://ms.portal.azure.com/) in the ```env/.env.local.user``` file or ```env/.env.dev.user``` file according to environment.
+2. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT, SECRET_AZURE_SEARCH_ENDPOINT, SECRET_AZURE_SEARCH_KEY``` variables from the [Azure portal](https://ms.portal.azure.com/) in the ```env/.env.local.user``` file or ```env/.env.dev.user``` file according to environment.
+3. **Data Ingestion**: Add your data according to the instructions [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/use-your-data?tabs=ai-search). Alternatively, add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
+
 
 ## Sideloading the app to Teams Personal Chat:
 1. Go to your Teams app and click on the ```Apps``` icon. Select ```Manage your apps``` followed by ```Upload an app```.
