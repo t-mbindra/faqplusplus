@@ -7,19 +7,14 @@
 <!-- code_chunk_output -->
 
 ## Setting up the app in Github Codespaces
-
 1. Click Open in GitHub Codespaces badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
 2. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
-3. Deploy [Azure AI resources](#deploy-azure-ai-resources)
-4. Deploying locally:
-   Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Select ```Debug``` and press ```F5``` or click on the play button.
-   Download the zip file ```appPackage/build/appPackage.local.zip``` and [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and  [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
-5. Alternatively, deploy the app to Azure:
-   Using the Teams Toolkit Extension tab, click on ```Provision``` followed by ```DEPLOY``` under ```LIFECYCLE```.
-   Download the zip file ```appPackage/build/appPackage.dev.zip``` and [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat)  and  [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
-
+3. [Set up your data source using Azure AI resources](#setting-up-your-data-source).
+4. [Populate the environment files](#populating-the-env-files).
+5. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Select ```Debug``` and press ```F5``` or click on the play button.
+6. Download the zip file ```appPackage/build/appPackage.local.zip``` and [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and  [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
+   
 ## Setting up the app locally
-
 1. Clone the repository
    ```git clone https://github.com/t-mbindra/chat-with-your-data.git```
 2. Install [Python 3.11](https://www.python.org/downloads/), [Node.js](https://nodejs.org/) and [Rust](https://www.rust-lang.org/tools/install).
@@ -30,19 +25,26 @@
    ```poetry install```
 9. Run
    ```poetry build```
-10. Deploy [Azure AI resources](#deploy-azure-ai-resources). This only needs to be done once.
+3. [Set up your data source using Azure AI resources](#setting-up-your-data-source).
+4. [Populate the environment files](#populating-the-env-files).
 11. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
-12. Deploying locally:
-   Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Press ```F5``` or click on the play button. Also, [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
-14. Alternatively, deploy the app to Azure:
-    Using the Teams Toolkit Extension tab, click on ```Provision``` followed by ```DEPLOY``` under ```LIFECYCLE```.
-    Using the zip file ```appPackage/build/appPackage.dev.zip```, [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
+12. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Press ```F5``` or click on the play button. Also, [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
 
-## Deploy Azure AI Resources
+## Deploying the app on Azure
+Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
+1. Using the Teams Toolkit Extension tab, click on ```Provision``` followed by ```DEPLOY``` under ```LIFECYCLE```. You will be asked to select the subscription and resource group for provisioning.
+2. Using the zip file ```appPackage/build/appPackage.dev.zip```, [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
+
+## Setting up your knowledge base
 1. Run```sh deploy.sh``` in the terminal. You will be prompted to login to Azure and select a subscription.
-2. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT, SECRET_AZURE_SEARCH_ENDPOINT, SECRET_AZURE_SEARCH_KEY``` variables from the [Azure portal](https://ms.portal.azure.com/) in the ```env/.env.local.user``` file or ```env/.env.dev.user``` file according to environment.
-3. **Data Ingestion**: Add your data according to the instructions [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/use-your-data?tabs=ai-search). Alternatively, add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
+2. Go to the [Azure AI Studio](https://oai.azure.com/portal), select relevant subscription and the resource ```teamsazureopenai-cognitive```. Proceed to the ```Chat Playground```. 
+3. Add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
 
+## Populating the environment files
+1. You need to populate the environment variables in ```env/.env.local.user``` if you are using the ```Debug``` or ```F5``` flow. Else, populate the environment variables in ```env/.env.dev.user``` if you are dpleoying the app on Azure.
+2. Go to the the [Azure portal](https://ms.portal.azure.com/) and navigate to the resource group ```ChatWithYourData```. 
+3. Go to the ```teamsazureopenai-cognitive``` resource. Select the ```Keys and Endpoints``` tab under ```Resource Management```. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT``` using ```Key 1``` and ```Endpoint```.   
+4. Go to the ```teamsazureopenai-search``` resource. Populate ```SECRET_AZURE_SEARCH_ENDPOINT``` from the ```Url``` given. Select the ```Keys``` tab under ```Settings```.  Populate ```SECRET_AZURE_SEARCH_KEY``` using the ```Primary admin key```.
 
 ## Sideloading the app to Teams Personal Chat:
 1. Go to your Teams app and click on the ```Apps``` icon. Select ```Manage your apps``` followed by ```Upload an app```.
