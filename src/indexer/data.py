@@ -4,6 +4,7 @@ from datetime import datetime
 import pdfplumber
 import requests
 from typing import List, Dict, Any
+from bs4 import BeautifulSoup
 
 def generate_id(path: str) -> str:
     return base64.urlsafe_b64encode(path.encode()).decode().rstrip("=")
@@ -44,12 +45,16 @@ def get_file_data(folder_path: str, base_path: str) -> List[Dict[str, Any]]:
             data_list.extend(get_file_data(file_path, base_path))  # Recursive call for directories
     return data_list
 
+def clean_html(content: str) -> str:
+    soup = BeautifulSoup(content, 'html.parser')
+    return soup.get_text(separator='\n', strip=True)
+
 def fetch_url_content(url: str):
     """Fetch content from a URL and return it as a string."""
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP issues
-        return response.text
+        return clean_html(response.text)
     except requests.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return ""

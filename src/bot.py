@@ -139,7 +139,7 @@ async def on_member_added(context: TurnContext, state: AppTurnState):
     channel = context.activity.channel_data.get("settings", {}).get("selectedChannel", {}).get("id")  # type: ignore
 
     if (context.activity.members_added[0].id == context.activity.recipient.id and  # type: ignore
-        channel == "19:NbZrm0QGDBalb7yQtQ5uu_fKf5LRTJcILRxkarAVDs41@thread.tacv2"):
+        channel == config.TEAMS_CHANNEL_ID):
         await context.send_activity("The FAQ Bot has been added to this channel.")
         return True
     
@@ -203,7 +203,7 @@ async def on_talk_to_an_expert(context: TurnContext, state: AppTurnState):
     )
 
     params = ConversationParameters(
-        channel_data=create_teams_channel_data('19:NbZrm0QGDBalb7yQtQ5uu_fKf5LRTJcILRxkarAVDs41@thread.tacv2'),
+        channel_data=create_teams_channel_data(config.TEAMS_CHANNEL_ID),
         bot=context.activity.recipient, is_group=True,
         activity=Activity(type="message",attachments=[attachment]))
     

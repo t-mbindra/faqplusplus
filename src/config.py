@@ -21,3 +21,4 @@ class Config:
     AZURE_SEARCH_ENDPOINT = os.environ.get("AZURE_SEARCH_ENDPOINT", "")
     AZURE_SEARCH_KEY = os.environ.get("AZURE_SEARCH_KEY", "")
     AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX", "")
+    TEAMS_CHANNEL_ID = os.environ.get("TEAMS_CHANNEL_ID", "")
