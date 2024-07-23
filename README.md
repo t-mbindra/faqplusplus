@@ -37,8 +37,7 @@ Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
 
 ## Setting up your knowledge base
 1. Run```sh deploy.sh``` in the terminal. You will be prompted to login to Azure and select a subscription.
-2. Go to the [Azure AI Studio](https://oai.azure.com/portal), select relevant subscription and the resource ```teamsazureopenai-cognitive```. Proceed to the ```Chat Playground```. 
-3. Add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
+2. Add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
 
 ## Populating the environment files
 1. You need to populate the environment variables in ```env/.env.local.user``` if you are using the ```Debug``` or ```F5``` flow. Else, populate the environment variables in ```env/.env.dev.user``` if you are dpleoying the app on Azure.
