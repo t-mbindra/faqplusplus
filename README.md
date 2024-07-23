@@ -37,7 +37,8 @@ Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
 
 ## Setting up your knowledge base
 1. Run```sh deploy.sh``` in the terminal. You will be prompted to login to Azure and select a subscription.
-2. Add all your files to the ```src/data``` folder and run ```python ./src/indexer/setup.py```.
+2. Add all your files to the ```src/data``` folder and URLs to ```src/indexer/URL.txt``` and run ```python ./src/indexer/setup.py```.
+3. To delete the exisiting index, run ```python .src/indexer/delete.py```.
 
 ## Populating the environment files
 1. You need to populate the environment variables in ```env/.env.local.user``` if you are using the ```Debug``` or ```F5``` flow. Else, populate the environment variables in ```env/.env.dev.user``` if you are dpleoying the app on Azure.
