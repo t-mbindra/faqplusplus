@@ -9,8 +9,8 @@
 ## Setting up the app in Github Codespaces
 1. Click Open in GitHub Codespaces badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
 2. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
-3. [Set up your data source using Azure AI resources](#setting-up-your-data-source).
-4. [Populate the environment files](#populating-the-env-files).
+3. [Set up your knowledge base using Azure AI resources](#setting-up-your-knowledge-base).
+4. [Populate the environment files](#populating-the-environment-files).
 5. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Select ```Debug``` and press ```F5``` or click on the play button.
 6. Download the zip file ```appPackage/build/appPackage.local.zip``` and [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and  [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
    
@@ -25,8 +25,8 @@
    ```poetry install```
 9. Run
    ```poetry build```
-3. [Set up your data source using Azure AI resources](#setting-up-your-data-source).
-4. [Populate the environment files](#populating-the-env-files).
+3. [Set up your knowledge base using Azure AI resources](#setting-up-your-knowledge-base).
+4. [Populate the environment files](#populating-the-environment-files).
 11. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
 12. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Press ```F5``` or click on the play button. Also, [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
 
