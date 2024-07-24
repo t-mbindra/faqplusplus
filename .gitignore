@@ -9,5 +9,6 @@ appPackage/build
 .venv
 dist
 src/__pycache__
+src/cards/__pycache__
 src/indexer/__pycache__
-__pycahce__
+__pycache__
