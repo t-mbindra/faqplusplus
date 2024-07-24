@@ -19,6 +19,8 @@ param azureSearchEndpoint string = ''
 
 param azureSearchIndex string = ''
 
+param teamsChannelId string = ''
+
 @secure()
 @description('Required by Bot Framework package in your bot project')
 param botAadAppClientSecret string
@@ -95,6 +97,10 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'AZURE_SEARCH_INDEX'
           value: azureSearchIndex
+        }
+        {
+          name: 'TEAMS_CHANNEL_ID'
+          value: teamsChannelId
         }
       ]
       ftpsState: 'FtpsOnly'
