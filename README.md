@@ -38,7 +38,7 @@ Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
 2. Using the zip file ```appPackage/build/appPackage.dev.zip```, [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
 
 ## Setting up your knowledge base
-1. Run```sh deploy.sh``` in the terminal. You will be prompted to login to Azure and select a subscription.
+1. Run```sh deploy.sh``` in the terminal to deploy Azure Saerch and Azure OpenAI. You will be prompted to login to Azure and select a subscription.
 2. Add all your files to the ```src/data``` folder and URLs to ```src/indexer/URL.txt``` and run ```python ./src/indexer/setup.py```.
 3. To delete the exisiting index, run ```python .src/indexer/delete.py```.
 
