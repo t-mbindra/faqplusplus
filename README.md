@@ -6,7 +6,7 @@
 
 <!-- code_chunk_output -->
 
-![FAQBot Setup](assets/architecture-faq.png)
+![FAQBot Setup](assets/architecture.png)
 
 ## Setting up the app in Github Codespaces
 1. Click Open in GitHub Codespaces badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
