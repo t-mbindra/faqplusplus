@@ -1,4 +1,6 @@
 # FaqBot
+## Chatbot with Knowledge Base and Expert Support
+This project implements a chatbot that interacts with users, searches a knowledge base for answers, and escalates queries to a Teams channel when asked. Experts can then engage with users and update the knowledge base dynamically.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=830777765&devcontainer_path=.devcontainer%2Fdevcontainer.json&resume=1)
 
@@ -8,6 +10,9 @@
 
 ## Interacting with the bot
 ![FAQBot Setup](assets/flow.png)
+- **Automated Query Handling**: The bot responds to user queries by searching a pre-configured knowledge base.
+- **Expert Support**: Users can request to speak with an expert, the bot then posts the user's query to a specified Microsoft Teams channel. Experts can assign user requests to themselves and initiate a chat on Teams.
+- **Dynamic Knowledge Base Updates**: Experts can add new information to the knowledge base based on user interactions.
 
 ## Architecture
 ![FAQBot Setup](assets/architecture.png)
