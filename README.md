@@ -7,7 +7,7 @@
 ## Chatbot with Knowledge Base and Expert Support
 This project implements a chatbot that interacts with users, searches a knowledge base for answers, and escalates queries to a Teams channel when asked. Experts can then engage with users and update the knowledge base dynamically.
 
-[Faq+ Bot](#faq+-bot)
+## [Faq+ Bot](#faq+-bot)
     - [Interactin with the bot](#interacting-with-the-bot)
     - [How the knowledge base works](#how-the-knowledge-base-works)
     - [Setting up the app in Github Codespaces](#setting-up-the-app-in-github-codespaces)
