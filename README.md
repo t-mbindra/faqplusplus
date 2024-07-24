@@ -6,6 +6,10 @@
 
 <!-- code_chunk_output -->
 
+## Interacting with the bot
+![FAQBot Setup](assets/flow.png)
+
+## Architecture
 ![FAQBot Setup](assets/architecture.png)
 
 ## Setting up the app in Github Codespaces
