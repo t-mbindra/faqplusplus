@@ -34,6 +34,9 @@
     },
     "azureSearchIndex": {
         "value": "${{AZURE_SEARCH_INDEX}}"
+    },
+    "teamsChannelId": {
+        "value": "${{TEAMS_CHANNEL_ID}}"
     }
   }
 }
