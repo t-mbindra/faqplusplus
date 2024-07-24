@@ -6,6 +6,8 @@
 
 <!-- code_chunk_output -->
 
+![FAQBot Setup](assets/architecture.png)
+
 ## Setting up the app in Github Codespaces
 1. Click Open in GitHub Codespaces badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
 2. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
