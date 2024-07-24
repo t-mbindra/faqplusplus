@@ -6,7 +6,6 @@ from azure.search.documents.indexes.aio import SearchIndexClient
 from azure.search.documents.aio import SearchClient
 from utils import create_index_if_not_exists, delay, upsert_documents
 from data import get_all_data
-import warnings 
 
 async def main():
     index_name = 'faq-index'

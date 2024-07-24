@@ -84,7 +84,7 @@ async def get_default_prompt(context: TurnContext, state: TurnState, planner: Ac
                     "index_name": config.AZURE_SEARCH_INDEX,
                     "key": config.AZURE_SEARCH_KEY,
                     "semantic_configuration": 'default',
-                    "query_type": 'simple',
+                    "query_type": 'semantic',
                     "fields_mapping": { },
                     "in_scope": True,
                     "strictness": 3,
@@ -102,7 +102,7 @@ async def get_default_prompt(context: TurnContext, state: TurnState, planner: Ac
                         "endpoint": config.AZURE_SEARCH_ENDPOINT,
                         "index_name": config.AZURE_SEARCH_INDEX,
                         "semantic_configuration": 'default',
-                        "query_type": 'simple',
+                        "query_type": 'semantic',
                         "fields_mapping": { },
                         "in_scope": True,
                         "strictness": 3,
@@ -176,7 +176,7 @@ def get_chat_history(chat_history):
             chat_items.append(
                 {
                     "type": "TextBlock",
-                    "text": f"{role}: {content}",
+                    "text": f"**{role}**: {content}",
                     "wrap": True,
                     "spacing": "small"
                 }
@@ -218,8 +218,8 @@ async def on_talk_to_an_expert(context: TurnContext, state: AppTurnState):
     return True
 
 
-@app.adaptive_cards.action_submit("chat_with_user")
-async def on_chat_with_user(context: TurnContext, state: AppTurnState, data: dict):
+@app.adaptive_cards.action_submit("resolve_ticket")
+async def on_assign_to_me(context: TurnContext, state: AppTurnState, data: dict):
 
     attachment = create_talk_to_expert_card(data.get("user_principal_name"), data.get("user_name"),
                                              data.get("chat_items"), "In progress")

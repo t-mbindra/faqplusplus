@@ -63,9 +63,9 @@ def create_talk_to_expert_card(user_principal_name, user_name, chat_items, statu
                 },
                 {
                     "type": "Action.Submit",
-                    "title": "Assign ticket to me",
+                    "title": "Assign Ticket to Me",
                     "data": {
-                        "verb": "chat_with_user",
+                        "verb": "resolve_ticket",
                         "chat_items": chat_items,
                         "user_principal_name": user_principal_name,
                         "user_name": user_name

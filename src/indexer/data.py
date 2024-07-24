@@ -1,10 +1,15 @@
 import base64
 import os
 from datetime import datetime
-import pdfplumber
+from typing import List, Dict, Any, Union
+from PyPDF2 import PdfReader
+from docx import Document
+from pptx import Presentation
 import requests
-from typing import List, Dict, Any
 from bs4 import BeautifulSoup
+import json
+import re
+
 
 def generate_id(path: str) -> str:
     return base64.urlsafe_b64encode(path.encode()).decode().rstrip("=")
@@ -15,12 +20,50 @@ def generate_title_from_content(content: str) -> str:
     return title if title else ''
 
 def read_pdf(file_path: str) -> str:
-    # Function to read text content from a PDF file
-    with pdfplumber.open(file_path) as pdf:
-        content = ""
-        for page in pdf.pages:
-            content += page.extract_text() + "\n"
+    content = ""
+    with open(file_path, 'rb') as file:
+        reader = PdfReader(file)
+        for page in reader.pages:
+            page_text = page.extract_text() or ""
+            content += page_text + "\n"
     return content
+
+def read_docx(file_path: str) -> str:
+    doc = Document(file_path)
+    content = ""
+    for para in doc.paragraphs:
+        content += para.text + "\n"
+    return content
+
+def read_pptx(file_path: str) -> str:
+    prs = Presentation(file_path)
+    content = ""
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            if hasattr(shape, "text"):
+                content += shape.text + "\n"
+    return content
+
+def read_html(file_path: str) -> str:
+    with open(file_path, 'r') as file:
+        content = file.read()
+        soup = BeautifulSoup(content, "html.parser")
+        text = soup.get_text()
+    return text
+
+def read_json(file_path: str) -> str:
+    def format_json(obj: Any) -> str:
+        """Recursively format JSON objects into a string."""
+        if isinstance(obj, dict):
+            return json.dumps({k: format_json(v) for k, v in obj.items()}, indent=2)
+        elif isinstance(obj, list):
+            return "\n".join(format_json(item) for item in obj)
+        else:
+            return json.dumps(obj)
+    with open(file_path, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    
+    return format_json(data)
 
 def get_file_data(folder_path: str, base_path: str) -> List[Dict[str, Any]]:
     data_list = []
@@ -29,15 +72,21 @@ def get_file_data(folder_path: str, base_path: str) -> List[Dict[str, Any]]:
         if os.path.isfile(file_path):
             if file_name.endswith('.pdf'):
                 content = read_pdf(file_path)
+            elif file_name.endswith('.docx'):
+                content = read_docx(file_path)
+            elif file_name.endswith('.pptx'):
+                content = read_pptx(file_path)
+            elif file_name.endswith('.html'):
+                content = read_html(file_path)
             else:
                 with open(file_path, 'r', encoding='utf-8') as file:
-                    content = file.read()
+                    content = file.read().strip()
+            
             relative_path = os.path.relpath(file_path, base_path)
             data_list.append({
                 'id': generate_id(file_path),
                 'content': content,
-                'filepath': relative_path,
-                'title': generate_title_from_content(content),
+                'title': relative_path,
                 'lastUpdated': datetime.fromtimestamp(os.path.getmtime(file_path)),
                 'url': None
             })
@@ -45,16 +94,14 @@ def get_file_data(folder_path: str, base_path: str) -> List[Dict[str, Any]]:
             data_list.extend(get_file_data(file_path, base_path))  # Recursive call for directories
     return data_list
 
-def clean_html(content: str) -> str:
-    soup = BeautifulSoup(content, 'html.parser')
-    return soup.get_text(separator='\n', strip=True)
-
-def fetch_url_content(url: str):
+def fetch_url_content(url: str) -> str:
     """Fetch content from a URL and return it as a string."""
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP issues
-        return clean_html(response.text)
+        content = response.text
+        text = BeautifulSoup(content, "html.parser").get_text()        
+        return text
     except requests.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return ""
@@ -75,7 +122,6 @@ def add_urls_content(data_list: List[Dict[str, Any]], urls_file_path: str) -> No
             data_list.append({
                 'id': generate_id(url),
                 'content': content,
-                'filepath': None,
                 'title': generate_title_from_content(content),
                 'lastUpdated': datetime.now(),
                 'url': url

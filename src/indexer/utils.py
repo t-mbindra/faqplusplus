@@ -24,7 +24,6 @@ async def create_index_if_not_exists(client: SearchIndexClient, name: str) -> No
         name=name,
         fields=[
             SearchField(name="content", type="Edm.String", searchable=True, filterable=False, retrievable=True, stored=True, sortable=False, facetable=False),
-            SearchField(name="filepath", type="Edm.String", searchable=False, filterable=True, retrievable=True, stored=True, sortable=False, facetable=False),
             SearchField(name="title", type="Edm.String", searchable=True, filterable=False, retrievable=True, stored=True, sortable=False, facetable=False),
             SearchField(name="id", type="Edm.String", key=True, searchable=False, filterable=True, retrievable=True, stored=True, sortable=True, facetable=False),
             SearchField(name="lastUpdated", type="Edm.String", searchable=False, filterable=True, retrievable=True, stored=True, sortable=True, facetable=False),
