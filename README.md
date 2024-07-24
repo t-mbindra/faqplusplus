@@ -78,6 +78,7 @@ Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
 2. Go to the the [Azure portal](https://ms.portal.azure.com/) and navigate to the resource group ```FaqBot```. 
 3. Go to the ```teamsazureopenai-cognitive``` resource. Select the ```Keys and Endpoints``` tab under ```Resource Management```. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT``` using ```Key 1``` and ```Endpoint```.   
 4. Go to the ```teamsazureopenai-search``` resource. Populate ```SECRET_AZURE_SEARCH_ENDPOINT``` from the ```Url``` given. Select the ```Keys``` tab under ```Settings```.  Populate ```SECRET_AZURE_SEARCH_KEY``` using the ```Primary admin key```.
+5. Set the environment variable ```TEAMS_CHANNEL_ID``` from the link of the channel - https://teams.microsoft.com/l/channel/<teams_channel_id_string>/. Remember to first decode the URL-encoded string ```teams_channel_id_string```.
 
 ## Sideloading the app to Teams Personal Chat:
 1. Go to your Teams app and click on the ```Apps``` icon. Select ```Manage your apps``` followed by ```Upload an app```.
