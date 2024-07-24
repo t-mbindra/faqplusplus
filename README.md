@@ -1,4 +1,4 @@
-# FaqBot
+# Faq+ Bot
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=830777765&devcontainer_path=.devcontainer%2Fdevcontainer.json&resume=1)
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
@@ -6,6 +6,18 @@
 
 ## Chatbot with Knowledge Base and Expert Support
 This project implements a chatbot that interacts with users, searches a knowledge base for answers, and escalates queries to a Teams channel when asked. Experts can then engage with users and update the knowledge base dynamically.
+
+[Faq+ Bot](#faq+-bot)
+    - [Interactin with the bot](#interacting-with-the-bot)
+    - [How the knowledge base works](#how-the-knowledge-base-works)
+    - [Setting up the app in Github Codespaces](#setting-up-the-app-in-github-codespaces)
+    - [Setting up the app locally](#setting-up-the-app-locally)
+        - [Deploying the app on Azure](#deploying-the-app-on-azure)
+    - [Setting up your knowledge base](#setting-up-your-knowledge-base)
+        - [Populating the environment files](#populating-the-environment-files)
+    - [Sideloading the app to Teams Personal Chat](#sideloading-the-app-to-teams-personal-chat)
+    - [Sideloading the app to Teams Channel](#sideloading-the-app-to-teams-channel)
+
 
 ## Interacting with the bot
 ![FAQBot Setup](assets/flow.png)
