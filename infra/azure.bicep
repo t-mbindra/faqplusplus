@@ -19,6 +19,8 @@ param azureSearchEndpoint string = ''
 
 param azureSearchIndex string = ''
 
+param azureOpenAIModel string = ''
+
 param teamsChannelId string = ''
 
 @secure()
@@ -97,6 +99,10 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'AZURE_SEARCH_INDEX'
           value: azureSearchIndex
+        }
+        {
+          name: 'AZURE_OPENAI_MODEL'
+          value: azureOpenAIModel
         }
         {
           name: 'TEAMS_CHANNEL_ID'

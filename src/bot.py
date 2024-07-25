@@ -46,7 +46,7 @@ if config.AZURE_OPENAI_KEY:
     model = OpenAIModel(
         AzureOpenAIModelOptions(
             api_key=config.AZURE_OPENAI_KEY,
-            default_model='gpt-4o',
+            default_model=config.AZURE_OPENAI_MODEL,
             api_version="2024-02-15-preview",
             endpoint=config.AZURE_OPENAI_ENDPOINT,
             logger=logger
@@ -56,7 +56,7 @@ else:
     model = OpenAIModel(
         AzureOpenAIModelOptions(
             azure_ad_token_provider=get_bearer_token_provider(DefaultAzureCredential(), 'https://cognitiveservices.azure.com/.default'),
-            default_model='gpt-4o',
+            default_model=config.AZURE_OPENAI_MODEL,
             api_version="2024-02-15-preview",
             endpoint=config.AZURE_OPENAI_ENDPOINT,
             logger=logger
@@ -71,7 +71,7 @@ prompts = PromptManager(
 async def get_default_prompt(context: TurnContext, state: TurnState, planner: ActionPlanner) -> PromptTemplate:
     prompt = await prompts.get_prompt("chat")
 
-    prompt.config.completion.model = 'gpt-4o'
+    prompt.config.completion.model = config.AZURE_OPENAI_MODEL
 
     if config.AZURE_SEARCH_ENDPOINT:
         if config.AZURE_SEARCH_KEY:
@@ -147,13 +147,13 @@ async def on_member_added(context: TurnContext, state: AppTurnState):
     
     if (member_added_to_channel is None): 
         await context.send_activity(
-            "Welcome to the FAQ Bot ! I'm here to answer your queries. To clear the conversation history, type clear in the chat. To talk to an expert, type expert."
+            "Welcome to the FAQ Bot ! I'm here to answer your queries. To clear the conversation history, type `/clear` in the chat. To talk to an expert, type `/expert`."
             )
     
     return True
 
 
-@app.message(re.compile(r"clear", re.IGNORECASE))
+@app.message(re.compile(r"/clear", re.IGNORECASE))
 async def on_clear(context: TurnContext, state: AppTurnState):
 
     del state.conversation
@@ -193,7 +193,7 @@ def create_teams_channel_data(team_channel_id: str):
 async def do_nothing(tc2: TurnContext):
     return
 
-@app.message(re.compile(r"expert", re.IGNORECASE))
+@app.message(re.compile(r"/expert", re.IGNORECASE))
 async def on_talk_to_an_expert(context: TurnContext, state: AppTurnState):
 
     member = await TeamsInfo.get_member(context, context.activity.from_property.id)  # type: ignore

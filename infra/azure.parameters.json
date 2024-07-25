@@ -35,6 +35,9 @@
     "azureSearchIndex": {
         "value": "${{AZURE_SEARCH_INDEX}}"
     },
+    "azureOpenAIModel": {
+        "value": "${{AZURE_OPENAI_MODEL}}"
+    },
     "teamsChannelId": {
         "value": "${{TEAMS_CHANNEL_ID}}"
     }
