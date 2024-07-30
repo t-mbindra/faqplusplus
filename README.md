@@ -25,6 +25,14 @@ This project implements a chatbot that interacts with users, searches a knowledg
 - **Expert Support**: Users can request to speak with an expert, the bot then posts the user's query to a specified Microsoft Teams channel. Experts can assign user requests to themselves and initiate a chat on Teams.
 - **Dynamic Knowledge Base Updates**: Experts can add new information to the knowledge base based on user interactions.
 
+### User Interaction
+
+https://github.com/user-attachments/assets/159e49b8-7408-4248-bfb0-abe89d5280e2
+
+### Expert Interaction
+
+https://github.com/user-attachments/assets/9b5c63a9-348c-4846-8fde-2e78dad097b6
+
 ## How the knowledge base works
 ![FAQBot Setup](assets/architecture.png)
 1. **User Query**:
@@ -37,14 +45,6 @@ This project implements a chatbot that interacts with users, searches a knowledg
 4. **Azure OpenAI**:
    - The promt is also sent to Azure OpenAI model to set the context and intent.
    - The model provides a generative response which is sent back to the user.
-    
-### User Interaction
-
-https://github.com/user-attachments/assets/159e49b8-7408-4248-bfb0-abe89d5280e2
-
-### Expert Interaction
-
-https://github.com/user-attachments/assets/9b5c63a9-348c-4846-8fde-2e78dad097b6
 
 ## Setting up the app in Github Codespaces
 1. Click **Open in GitHub Codespaces** badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
