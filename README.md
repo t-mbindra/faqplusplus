@@ -48,20 +48,25 @@ This project implements a chatbot that interacts with users, searches a knowledg
 6. Download the zip file ```appPackage/build/appPackage.local.zip``` and [sideload the app to Teams personal chat](#sideloading-the-app-to-teams-personal-chat) and  [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
    
 ## Setting up the app locally
+### Prerequisites
+- [Python 3.11](https://www.python.org/downloads/)
+- [Node.js](https://nodejs.org/)
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Poetry](https://python-poetry.org/docs/#installation)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [Visual Studio Code](https://code.visualstudio.com/download)
+- [Teams Toolkit Extension ](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.ms-teams-vscode-extension)
+- [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+
 1. Clone the repository
    ```git clone https://github.com/t-mbindra/chat-with-your-data.git```
-2. Install [Python 3.11](https://www.python.org/downloads/), [Node.js](https://nodejs.org/) and [Rust](https://www.rust-lang.org/tools/install).
-4. Install  [Poetry](https://python-poetry.org/docs/#installation) and [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
-5. Open the project folder in [Visual Studio Code](https://code.visualstudio.com/download).
-6. Install the [Teams Toolkit](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.ms-teams-vscode-extension) and [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) extensions.
-8. Run
-   ```poetry install```
-9. Run
-   ```poetry build```
-3. [Set up your knowledge base using Azure AI resources](#setting-up-your-knowledge-base).
-4. [Populate the environment files](#populating-the-environment-files).
-11. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
-12. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Press ```F5``` or click on the play button. Also, [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
+2. Open the project folder(Microsoft-Teams-Samples/samples/msteams-chat-with-your-data) in VS Code.
+3.  Run
+   ```poetry install && poetry build```
+4. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
+5. [Set up your knowledge base using Azure AI resources](#setting-up-your-knowledge-base).
+6. [Populate the environment files](#populating-the-environment-files).
+7. Press **Ctrl+Shift+D** to open the ```Run and Debug``` menu. Press ```F5``` or click on the play button. Also, [sideload the app to Teams Channel](#sideloading-the-app-to-teams-channel)
 
 ## Deploying the app on Azure
 Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
@@ -76,9 +81,13 @@ Instead of the ```Debug``` or ```F5``` flow, you can deploy the app on Azure:
 ## Populating the environment files
 1. You need to populate the environment variables in ```env/.env.local.user``` if you are using the ```Debug``` or ```F5``` flow. Else, populate the environment variables in ```env/.env.dev.user``` if you are dpleoying the app on Azure.
 2. Go to the the [Azure portal](https://ms.portal.azure.com/) and navigate to the resource group ```FaqBot```. 
-3. Go to the ```teamsazureopenai-cognitive``` resource. Select the ```Keys and Endpoints``` tab under ```Resource Management```. Populate the ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT``` using ```Key 1``` and ```Endpoint```.   
-4. Go to the ```teamsazureopenai-search``` resource. Populate ```SECRET_AZURE_SEARCH_ENDPOINT``` from the ```Url``` given. Select the ```Keys``` tab under ```Settings```.  Populate ```SECRET_AZURE_SEARCH_KEY``` using the ```Primary admin key```.
-5. Set the environment variable ```TEAMS_CHANNEL_ID``` from the link of the channel - https://teams.microsoft.com/l/channel/<teams_channel_id_string>/.  Remember to first decode the URL-encoded string.
+3. To populate ```SECRET_AZURE_OPENAI_KEY, SECRET_AZURE_OPENAI_ENDPOINT``` variables:
+   - Go to the ```faqbot-cognitive``` resource. Select the ```Keys and Endpoints``` tab under ```Resource Management```. Use ```Key 1``` and ```Endpoint```. 
+4. To populate   ```SECRET_AZURE_SEARCH_ENDPOINT``` variable:
+   - Go to the ```faqbot-search``` resource. Use the ```Url``` given.
+5. To populate   ```SECRET_AZURE_SEARCH_KEY``` variable:
+   - Go to the ```faqbot-search``` resource. Select the ```Keys``` tab under ```Settings```.  Use ```Primary admin key```.
+6. Set the environment variable ```TEAMS_CHANNEL_ID``` from the link of the channel - https://teams.microsoft.com/l/channel/<teams_channel_id_string>/.  Remember to first decode the URL-encoded string.
 
 ## Sideloading the app to Teams Personal Chat:
 1. Go to your Teams app and click on the ```Apps``` icon. Select ```Manage your apps``` followed by ```Upload an app```.
