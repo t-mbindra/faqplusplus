@@ -38,9 +38,16 @@ This project implements a chatbot that interacts with users, searches a knowledg
    - The promt is also sent to Azure OpenAI model to set the context and intent.
    - The model provides a generative response which is sent back to the user.
     
+### User Interaction
+
+https://github.com/user-attachments/assets/159e49b8-7408-4248-bfb0-abe89d5280e2
+
+### Expert Interaction
+
+https://github.com/user-attachments/assets/9b5c63a9-348c-4846-8fde-2e78dad097b6
 
 ## Setting up the app in Github Codespaces
-1. Click Open in GitHub Codespaces badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
+1. Click **Open in GitHub Codespaces** badge above to create a codespace for the sample app. Wait for the codespace to be setup, it may take a couple of minutes.
 2. Using the Teams Toolkit extension, sign in to your Microsoft 365 account and Azure account under ```ACCOUNTS```.
 3. [Set up your knowledge base using Azure AI resources](#setting-up-your-knowledge-base).
 4. [Populate the environment files](#populating-the-environment-files).
